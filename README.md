@@ -1,1 +1,1 @@
-# LEXIFY-DAILY
+# lexifydaily
