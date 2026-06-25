@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lexify Daily — Word of the Day + Quiz</title>
+  <meta name="description" content="Expand your vocabulary daily. Word of the day, etymology, usage examples, and a daily quiz. Free, global, and addictive." />
+  <meta property="og:title" content="Lexify Daily" />
+  <meta property="og:description" content="Your daily word challenge. How many can you get right?" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- AD BANNER TOP (728x90 leaderboard) -->
+<div class="ad-slot ad-top" id="ad-top">
+  <span class="ad-label">Advertisement</span>
+  <div class="ad-placeholder">
+    <!-- Google AdSense / GPT Tag goes here -->
+    <!-- <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX"></ins> -->
+    <div class="ad-mock">728 × 90 — Leaderboard Ad</div>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-lex">Lex</span><span class="logo-ify">ify</span>
+      <span class="logo-dot">·</span>
+      <span class="logo-daily">Daily</span>
+    </div>
+    <nav class="header-nav">
+      <a href="#word">Word</a>
+      <a href="#quiz">Quiz</a>
+      <a href="#archive">Archive</a>
+      <button class="btn-streak" id="streakBtn">🔥 <span id="streakCount">0</span> day streak</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="word">
+    <div class="hero-date" id="heroDate"></div>
+    <div class="hero-label">Word of the Day</div>
+    <h1 class="word-title" id="mainWord">Loading...</h1>
+    <div class="word-phonetic" id="wordPhonetic"></div>
+    <div class="word-pos-badge" id="wordPos"></div>
+
+    <div class="word-card">
+      <div class="word-card-section">
+        <div class="section-eyebrow">Definition</div>
+        <p class="word-definition" id="wordDef"></p>
+      </div>
+      <div class="word-card-divider"></div>
+      <div class="word-card-section">
+        <div class="section-eyebrow">Etymology</div>
+        <p class="word-etymology" id="wordEtym"></p>
+      </div>
+      <div class="word-card-divider"></div>
+      <div class="word-card-section">
+        <div class="section-eyebrow">Used in a sentence</div>
+        <blockquote class="word-example" id="wordExample"></blockquote>
+      </div>
+      <div class="word-synonyms-row">
+        <span class="syn-label">Synonyms:</span>
+        <div class="syn-tags" id="wordSynonyms"></div>
+      </div>
+    </div>
+
+    <div class="share-row">
+      <button class="btn-share" onclick="shareWord()">📤 Share today's word</button>
+      <button class="btn-listen" onclick="speakWord()" id="listenBtn">🔊 Hear it</button>
+      <button class="btn-save" onclick="saveWord()" id="saveBtn">🔖 Save</button>
+    </div>
+  </section>
+
+  <!-- AD SLOT MIDDLE (300x250 rectangle) -->
+  <div class="ad-slot ad-middle">
+    <span class="ad-label">Advertisement</span>
+    <div class="ad-placeholder">
+      <div class="ad-mock">300 × 250 — Rectangle Ad</div>
+    </div>
+  </div>
+
+  <!-- DAILY QUIZ SECTION -->
+  <section class="quiz-section" id="quiz">
+    <div class="quiz-header">
+      <div class="quiz-eyebrow">Daily Challenge</div>
+      <h2 class="quiz-title">Test Your Vocabulary</h2>
+      <p class="quiz-subtitle">5 questions · refreshes every midnight UTC</p>
+    </div>
+
+    <div class="quiz-progress-bar">
+      <div class="quiz-progress-fill" id="quizProgressFill"></div>
+    </div>
+    <div class="quiz-progress-label"><span id="quizCurrentQ">1</span> / <span id="quizTotalQ">5</span></div>
+
+    <div class="quiz-card" id="quizCard">
+      <div class="quiz-question-num" id="qNum">Question 1</div>
+      <h3 class="quiz-question" id="quizQuestion"></h3>
+      <div class="quiz-options" id="quizOptions"></div>
+      <button class="btn-next" id="btnNext" style="display:none" onclick="nextQuestion()">Next →</button>
+    </div>
+
+    <div class="quiz-result" id="quizResult" style="display:none">
+      <div class="result-emoji" id="resultEmoji"></div>
+      <div class="result-score" id="resultScore"></div>
+      <div class="result-message" id="resultMessage"></div>
+      <div class="result-share-row">
+        <button class="btn-share-result" onclick="shareResult()">📊 Share my score</button>
+        <button class="btn-replay" onclick="reviewQuiz()">👁 Review answers</button>
+      </div>
+      <div class="comeback-timer">
+        Next quiz in: <span id="nextQuizTimer" class="timer-value"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT IN-CONTENT -->
+  <div class="ad-slot ad-infeed">
+    <span class="ad-label">Advertisement</span>
+    <div class="ad-placeholder">
+      <div class="ad-mock">970 × 250 — Billboard Ad</div>
+    </div>
+  </div>
+
+  <!-- WORD ARCHIVE -->
+  <section class="archive-section" id="archive">
+    <h2 class="archive-title">This Week's Words</h2>
+    <div class="archive-grid" id="archiveGrid"></div>
+  </section>
+
+  <!-- STATS BAR -->
+  <section class="stats-section">
+    <div class="stat-item">
+      <div class="stat-number" id="statPlayers">2.4M+</div>
+      <div class="stat-label">Daily Players</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number" id="statWords">1,826</div>
+      <div class="stat-label">Words in Archive</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number">147</div>
+      <div class="stat-label">Countries</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number">4.8★</div>
+      <div class="stat-label">User Rating</div>
+    </div>
+  </section>
+
+  <!-- AD SLOT BOTTOM -->
+  <div class="ad-slot ad-bottom">
+    <span class="ad-label">Advertisement</span>
+    <div class="ad-placeholder">
+      <div class="ad-mock">728 × 90 — Leaderboard Ad</div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">Lexify Daily</div>
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+      <a href="#">Advertise</a>
+    </div>
+    <div class="footer-copy">© 2025 Lexify Daily. Made for curious minds worldwide.</div>
+  </div>
+</footer>
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toast"></div>
+
+<!-- STREAK MODAL -->
+<div class="modal-overlay" id="streakModal" style="display:none">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('streakModal')">✕</button>
+    <div class="modal-emoji">🔥</div>
+    <h3>Your Streak</h3>
+    <div class="modal-streak-num" id="modalStreakNum">0</div>
+    <p>days in a row</p>
+    <div class="streak-calendar" id="streakCalendar"></div>
+    <button class="btn-modal-share" onclick="shareStreak()">Share my streak</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
